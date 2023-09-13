@@ -1,0 +1,91 @@
+import { useState } from "react";
+import useForm from "../hooks/use-form";
+const BasicForm = (props) => {
+  const isNotEmpty = value => value.trim() !== ''
+
+  const {
+    value: enteredfirstName,
+    isValid: firstNameisValid,
+    hasError: firstnameInputHasError,
+    valueChangeHandler: firstnameChangedHandler,
+    reset: resetfirstNameInput,
+    inputblurHandler: firstnameBlurHandler } = useForm(isNotEmpty)//custom hook
+
+  const {
+    value: enteredLastName,
+    isValid: lastNameisValid,
+    hasError: lastnameInputHasError,
+    reset: resetlastNameInput,
+    valueChangeHandler: lastnameChangedHandler,
+    inputblurHandler: lastnameBlurHandler } = useForm(isNotEmpty)//custom hook
+
+  const {
+    value: enteredEmail,
+    isValid: emailisValid,
+    reset: resetemail,
+    hasError: emailHasError,
+    valueChangeHandler: emailChangedHandler,
+    inputblurHandler: emailBlurHandler } = useForm(value => value.includes('@'))//custom hook
+
+  let formisValid = false;
+  if (firstNameisValid && lastNameisValid && emailisValid) {
+    formisValid = true;
+  }
+  const formsubmitHandler = (e) => {
+    e.preventDefault();
+    if (!formisValid) {
+      return;
+    }
+    resetfirstNameInput();
+    resetlastNameInput();
+    resetemail();
+
+  }
+  console.log(enteredfirstName);
+  console.log(enteredLastName);
+  console.log(enteredEmail);
+
+  const firstnameinputclass = !firstnameInputHasError ? 'form-control' : 'form-control invalid'
+  const lastnameinputclass = !lastnameInputHasError ? 'form-control' : 'form-control invalid'
+  const emailinputclass = !emailHasError ? 'form-control' : 'form-control invalid'
+
+  return (
+    <form onSubmit={formsubmitHandler}>
+      <div className='control-group'>
+        <div className={firstnameinputclass}>
+          <label htmlFor='name'>First Name</label>
+          <input
+            onChange={firstnameChangedHandler}
+            type='text'
+            id='name'
+            value={enteredfirstName}
+            onBlur={firstnameBlurHandler} />
+          {firstnameInputHasError && <p className="error-text">Please enter your first name</p>}
+        </div>
+        <div className={lastnameinputclass}>
+          <label htmlFor='name'>Last Name</label>
+          <input
+            onChange={lastnameChangedHandler}
+            type='text' id='name'
+            value={enteredLastName}
+            onBlur={lastnameBlurHandler} />
+          {lastnameInputHasError && <p className="error-text">Please enter your Last name</p>}
+        </div>
+      </div>
+      <div className={emailinputclass}>
+        <label htmlFor='name'>E-Mail Address</label>
+        <input
+          onChange={emailChangedHandler}
+          type='email' id='name'
+          value={enteredEmail}
+          onBlur={emailBlurHandler} />
+        {emailHasError && <p className="error-text">Please enter your email</p>}
+      </div>
+      <div className='form-actions'>
+        <button disabled={!formisValid} type="submit">Submit</button>
+      </div>
+    </form>
+  );
+};
+
+export default BasicForm;
