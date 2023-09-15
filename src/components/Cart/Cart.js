@@ -1,5 +1,6 @@
 import { useContext } from 'react';
-import {hgjhsgd}
+
+
 import Modal from '../UI/Modal';
 import CartItem from './CartItem';
 import classes from './Cart.module.css';
